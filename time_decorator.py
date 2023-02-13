@@ -25,7 +25,9 @@ class Alarm:
         raise TimeoutError("it ran more than {} seconds".format(self.interval))
 
 def timeout(n_seconds):
-    
+    """
+    Will raise TimeoutError if a function run longer than n_seconds
+    """
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args,**kwargs):
