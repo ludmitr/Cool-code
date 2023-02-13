@@ -24,30 +24,29 @@ class Alarm:
     def raise_error(self):
         raise TimeoutError("it ran more than {} seconds".format(self.interval))
 
-def timeout(func):
-    """
-    Will raise timeouterror if a function run longer than 5 sec
-    """
-    @functools.wraps(func)
-    def wrapper(*args,**kwargs):
-        a = Alarm(5)
-        a.start()
-        try:
-            func()
-        except TimeoutError as e:
-            raise e
-        finally:
-            a.stop()
-            
-    return wrapper
+def timeout(n_seconds):
+    
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args,**kwargs):
+            a = Alarm(n_seconds)
+            a.start()
+            try:
+                func()
+            except TimeoutError as e:
+                raise e
+            finally:
+                a.stop()
+        return wrapper
+    return decorator
 
-@timeout
+@timeout(3)
 def func_one():
     time.sleep(1)
     print("func one finished")
-@timeout
+@timeout(2)
 def func_two():
-    time.sleep(6)
+    time.sleep(4)
     print("func two finished")
 
 
