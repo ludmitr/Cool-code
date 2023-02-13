@@ -34,10 +34,10 @@ def timeout(n_seconds):
             a = Alarm(n_seconds)
             a.start()
             try:
+                # calling dec function
                 func()
-            except TimeoutError as e:
-                raise e
             finally:
+                # stopping countdown
                 a.stop()
         return wrapper
     return decorator
